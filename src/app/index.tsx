@@ -5,7 +5,7 @@ import { Link } from "expo-router";
 import { useState, useRef } from "react";
 
 //utils
-import { CATEGORIES, MENU } from "../utils/data/products";
+import { CATEGORIES, MENU, ProductProps } from "../utils/data/products";
 
 //store
 import { useCartStore } from "../stores/card-store";
@@ -19,7 +19,7 @@ export default function Home() {
   const carStore = useCartStore()
   const [category, setCategory] = useState<string>(CATEGORIES[0]);
 
-  const sectionListRef = useRef<SectionList>(null);
+  const sectionListRef = useRef<SectionList<ProductProps>>(null);
 
   const cardQuantityItems = carStore.products.reduce((total, product) => total + product.quantity, 0)
 

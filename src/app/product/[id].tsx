@@ -4,7 +4,7 @@ import React from "react";
 import { Image, Text, View } from "react-native";
 
 //expo
-import { useLocalSearchParams, useNavigation } from "expo-router";
+import { useLocalSearchParams, useNavigation, Redirect } from "expo-router";
 import { Feather } from "@expo/vector-icons";
 
 //utils
@@ -23,14 +23,20 @@ type Props = {};
 const Product = (props: Props) => {
   const { id } = useLocalSearchParams();
   const cartStore = useCartStore();
-  const navigation = useNavigation()
+  const navigation = useNavigation();
 
-  const product = PRODUCTS.filter((item) => item.id === id)[0];
+  const product = PRODUCTS.find((item) => item.id === id);
 
   const handleAddToCart = () => {
-    cartStore.add(product)
-    navigation.goBack()
+    if (product) {
+      cartStore.add(product);
+      navigation.goBack();
+    }
   };
+
+  if (!product) {
+    return <Redirect href="/" />;
+  }
 
   return (
     <View className="flex-1">
@@ -40,7 +46,9 @@ const Product = (props: Props) => {
         resizeMode="cover"
       />
 
+
       <View className="p-5 mt-8 flex-1">
+      <Text className="text-xl text-white font-heading ">{product.title}</Text>
         <Text className="text-lime-400 text-2xl font-heading my-2">
           {formatCurrency(product.price)}
         </Text>
